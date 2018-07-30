@@ -1,3 +1,7 @@
+.landing_page{
+    min-height: 100vh;
+}
+
 .landing_message{
     color:red;
 }

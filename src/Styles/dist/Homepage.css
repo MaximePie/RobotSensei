@@ -1,3 +1,21 @@
+.landing_page{
+    min-height: 100vh;
+}
+
 .landing_message{
     color:red;
+}
+
+.robot_image{
+    width:128px;
+    height: 128px;
+}
+
+.robot_image_container {
+    min-height: 50vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: solid;
+    margin: 100px 0px;
 }
