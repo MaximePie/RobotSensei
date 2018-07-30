@@ -8,11 +8,11 @@ import "../Styles/dist/Homepage.css";
 export default class SurveyPage extends React.Component {
     render(){
         return(
-            <div>
+            <div className = "landing_page">
                 <div className = "landing_message">
                     Salut !
                 </div>
-                <div>
+                <div className="robot_image_container">
                     <img alt = "robot" className="robot_image" src = {robot_image}/>
                 </div>
             </div>
