@@ -67,8 +67,8 @@ export default class SurveyPage extends React.Component {
         if(trainer_infos)
         {
             trainer_name = trainer_infos.name;
-            delete_infos_button = <ActionDelete onClick ={()=>this.delete_infos()}/>;
-            let landing_message = "Salut " + trainer_name;
+            delete_infos_button = <ActionDelete className = "trash_icon" onClick ={()=>this.delete_infos()}/>;
+            let landing_message = <span className="landing_message_wording">{"Salut " + trainer_name}</span>
             landing_component =
                 <div className = "landing_message">
                     {landing_message}
