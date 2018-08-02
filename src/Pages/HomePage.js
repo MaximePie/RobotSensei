@@ -62,53 +62,36 @@ export default class SurveyPage extends React.Component {
         let trainer_infos = this.state.trainer_infos;
         let trainer_name = "!";
         let delete_infos_button = null;
-        let input_name_container = null;
+        let landing_component = null;
+        let robot_component = null;
         if(trainer_infos)
         {
             trainer_name = trainer_infos.name;
-            delete_infos_button = <ActionDelete onClick ={()=>this.delete_infos()}/>
+            delete_infos_button = <ActionDelete onClick ={()=>this.delete_infos()}/>;
+            let landing_message = "Salut " + trainer_name;
+            landing_component =
+                <div className = "landing_message">
+                    {landing_message}
+                    {delete_infos_button}
+                </div>;
+            robot_component =
+                <div className="robot_image_container">
+                    <img alt = "robot" className="robot_image" src = {robot_image}/>
+                </div>
+
         }
         else //No trainer infos
         {
-            let error_message = this.state.trainer_name_field.error;
-            let error_text;
-
-            if(error_message === "empty")
-            {
-                error_text = "Vous devez renseigner un nom d'éleveur ! Comment votre robot connaîtra-t'il ses parents après ?"
-            }
-            else
-            {
-                error_text = ""
-            }
-
-            input_name_container =
-                <div className="name_input_container">
-                    <TextField
-                        onChange={(e) => this.handle_trainer_name_change(e)}
-                        ref = "trainer_name"
-                        floatingLabelText="Votre nom d'éleveur"
-                        errorText={error_text}
-                    />
-                    <FlatButton onClick={() => this.handle_trainer_name_submit ()} label="Valider" />
-                </div>
+            landing_component = this.set_input_name_container();
         }
-        let landing_message = "Salut " + trainer_name;
 
-        let landing_component =
-            <div className = "landing_message">
-                {landing_message}
-                {delete_infos_button}
-            </div>;
+
 
 
         return(
             <div className = "landing_page">
                 {landing_component}
-                {input_name_container}
-                <div className="robot_image_container">
-                    <img alt = "robot" className="robot_image" src = {robot_image}/>
-                </div>
+                {robot_component}
             </div>
         )
     }
@@ -148,5 +131,35 @@ export default class SurveyPage extends React.Component {
         this.setState({
             trainer_name_field
         })
+    }
+
+    //Called when there are no info about the user yet
+    //Returns a component with a TextField and a Validate button
+    set_input_name_container() {
+        let error_message = this.state.trainer_name_field.error;
+        let error_text;
+        let input_name_container;
+
+        if(error_message === "empty")
+        {
+            error_text = "Vous devez renseigner un nom d'éleveur ! Comment votre robot connaîtra-t'il ses parents après ?"
+        }
+        else
+        {
+            error_text = ""
+        }
+
+        input_name_container =
+            <div className="name_input_container">
+                <TextField
+                    onChange={(e) => this.handle_trainer_name_change(e)}
+                    ref = "trainer_name"
+                    floatingLabelText="Votre nom d'éleveur"
+                    errorText={error_text}
+                />
+                <FlatButton onClick={() => this.handle_trainer_name_submit ()} label="Valider" />
+            </div>;
+
+        return input_name_container;
     }
 }
