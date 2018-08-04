@@ -1,11 +1,11 @@
 import React from "react";
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
+import Modal from '@material-ui/core/Modal';
 import robot_image from "../Ressources/robot_image.png"
 import { Cookies } from 'react-cookie';
 
 import ActionDelete from 'material-ui/svg-icons/action/delete';
-
 //Importing styles
 import "../Styles/dist/Homepage.css";
 
@@ -21,7 +21,8 @@ export default class SurveyPage extends React.Component {
             trainer_name_field : {
                 is_empty:true,
                 error : 'ok'
-            }
+            },
+            open_modal : false
         }
     }
 
@@ -64,6 +65,7 @@ export default class SurveyPage extends React.Component {
         let delete_infos_button = null;
         let landing_component = null;
         let robot_component = null;
+        let modal_content = null;
         if(trainer_infos)
         {
             trainer_name = trainer_infos.name;
@@ -75,9 +77,23 @@ export default class SurveyPage extends React.Component {
                     {delete_infos_button}
                 </div>;
             robot_component =
-                <div className="robot_image_container">
+                <div className="robot_container">
+                    <i className="material-icons md-18">face</i>
                     <img alt = "robot" className="robot_image" src = {robot_image}/>
-                </div>
+
+                </div>;
+
+            modal_content =
+                <Modal
+                    aria-labelledby="simple-modal-title"
+                    aria-describedby="simple-modal-description"
+                    open={this.state.open_modal}
+                    onClose={this.handleClose}
+                >
+                    <div className = "robot_message">
+                        01001010 00100111 01100001 01101001 00100000 01100110 01100001 01101001 01101101 00100000 00100001
+                    </div>
+                </Modal>
 
         }
         else //No trainer infos
@@ -92,9 +108,19 @@ export default class SurveyPage extends React.Component {
             <div className = "landing_page">
                 {landing_component}
                 {robot_component}
+                {modal_content}
             </div>
         )
     }
+
+    //Modal relative functions
+    handleOpen = () => {
+        this.setState({ open_modal: true });
+    };
+
+    handleClose = () => {
+        this.setState({ open_modal: false });
+    };
 
     //Called by clicking the trash component, removes trainer info to completely reset
     delete_infos() {
