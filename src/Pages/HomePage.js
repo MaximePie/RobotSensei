@@ -2,8 +2,9 @@ import React from "react";
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 import {Modal} from 'react-bootstrap';
-import robot_image from "../Ressources/robot_image.png"
 import { Cookies } from 'react-cookie';
+import robot_image from "../Ressources/robot_image.png"
+import pastecat from "../Ressources/pastecat.png"
 
 import ActionDelete from 'material-ui/svg-icons/action/delete';
 //Importing styles
@@ -21,6 +22,9 @@ export default class SurveyPage extends React.Component {
             trainer_name_field : {
                 is_empty:true,
                 error : 'ok'
+            },
+            quest:{
+                quest_speaker:'robot'
             },
             open_modal : false
         }
@@ -85,13 +89,22 @@ export default class SurveyPage extends React.Component {
 
             modal_content =
                 <Modal style={{ top: "38%" }} show={this.state.open_modal} onHide = {this.close_quest_interface} onClose={this.close_quest_interface}>
+                    {this.set_speaker_image()}
                     <Modal.Body className = "robot">
                         <div className = "robot_message">
                             <div className = "speaking_character_name">
                                 Mister Good Bot :
                             </div>
                             <div className = "quest_speech">
-                                01001010 00100111 01100001 01101001 00100000 01100110 01100001 01101001 01101101 00100000 00100001
+                                {this.state.quest.quest_speech}
+                            </div>
+                            <div className="modal_navigation_buttons">
+                                <i className="material-icons" onClick = {() => this.previous_text()}>
+                                    keyboard_arrow_left
+                                </i>
+                                <i className="material-icons" onClick = {() => this.next_text()}>
+                                    keyboard_arrow_right
+                                </i>
                             </div>
                         </div>
                     </Modal.Body>
@@ -137,9 +150,12 @@ export default class SurveyPage extends React.Component {
             is_empty:true,
             error : 'ok'
         };
+        let quest = {};
+        quest.quest_speech = "01001010 00100111 01100001 01101001 00100000 01100110 01100001 01101001 01101101 00100000 00100001"
         this.setState({
             trainer_infos,
-            trainer_name_field
+            trainer_name_field,
+            quest
         })
     }
 
@@ -188,5 +204,44 @@ export default class SurveyPage extends React.Component {
             </div>;
 
         return input_name_container;
+    }
+
+    //Sets the modal content to the previous step
+    previous_text() {
+        let quest = this.state.quest;
+        quest.quest_speech = "Previous one !";
+        quest.quest_speaker = "robot";
+        this.setState({
+            quest
+        })
+    }
+
+    //Sets the modal content to the previous step
+    next_text() {
+
+        let quest = this.state.quest;
+        quest.quest_speech = "Next one !";
+        quest.quest_speaker = "pastecat";
+        this.setState({
+            quest
+        })
+
+    }
+
+    //Setting speaker image depending on who's speaking
+    set_speaker_image() {
+
+        if(this.state.quest.quest_speaker === 'robot')
+        {
+            return <img alt = "robot" className="robot_image_quest" src = {robot_image}/>
+        }
+        else if (this.state.quest.quest_speaker === 'pastecat')
+        {
+            return <img alt = "pastecat" className="pastecat_image_quest" src = {pastecat}/>
+        }
+        else
+        {
+            return null;
+        }
     }
 }

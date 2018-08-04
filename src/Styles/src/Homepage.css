@@ -70,7 +70,29 @@
     }
 }
 
+.modal{
+    .robot_image_quest{
+        position: absolute;
+        bottom: -10vh;
+        left: -18vh;
+        height: 24vh;
+        z-index: 2;
+        animation:robotIdle 1s infinite ease-in-out;
+    }
+    .pastecat_image_quest{
+        position: absolute;
+        bottom: -10vh;
+        right: -24vh;
+        height: 24vh;
+        z-index: 2;
+        animation:robotIdle 1s infinite ease-in-out;
+    }
+}
+
 .modal-body{
+
+
+
     .speaking_character_name{
         font-weight:bolder;
         font-size:1.35em;
@@ -80,6 +102,19 @@
     .quest_speech{
         padding:12px;
         font-size:1.15em;
+    }
+
+    .modal_navigation_buttons{
+        display: flex;
+        justify-content: flex-end;
+        transition: background-color 0.15s ease;
+
+        i:hover{
+            border-radius:100%;
+            cursor:pointer;
+            background-color:#555555;
+            transition: background-color 0.15s ease;
+        }
     }
 }
 
@@ -93,7 +128,7 @@
         transform:rotate(0);
     }
     25%{
-        transform:rotate(3deg);
+        transform:rotate(3deg) translate3d(4px, 2px, 1px);
     }
     50%{
         transform:rotate(0);
