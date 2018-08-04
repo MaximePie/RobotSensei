@@ -1,7 +1,7 @@
 import React from "react";
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
-import Modal from '@material-ui/core/Modal';
+import {Modal} from 'react-bootstrap';
 import robot_image from "../Ressources/robot_image.png"
 import { Cookies } from 'react-cookie';
 
@@ -78,23 +78,24 @@ export default class SurveyPage extends React.Component {
                 </div>;
             robot_component =
                 <div className="robot_container">
-                    <i className="material-icons md-18">face</i>
+                    <i className="material-icons md-light quest_button" onClick={() => this.open_quest_interface()}>error</i>
                     <img alt = "robot" className="robot_image" src = {robot_image}/>
 
                 </div>;
 
             modal_content =
-                <Modal
-                    aria-labelledby="simple-modal-title"
-                    aria-describedby="simple-modal-description"
-                    open={this.state.open_modal}
-                    onClose={this.handleClose}
-                >
-                    <div className = "robot_message">
-                        01001010 00100111 01100001 01101001 00100000 01100110 01100001 01101001 01101101 00100000 00100001
-                    </div>
+                <Modal style={{ top: "38%" }} show={this.state.open_modal} onHide = {this.close_quest_interface} onClose={this.close_quest_interface}>
+                    <Modal.Body className = "robot">
+                        <div className = "robot_message">
+                            <div className = "speaking_character_name">
+                                Mister Good Bot :
+                            </div>
+                            <div className = "quest_speech">
+                                01001010 00100111 01100001 01101001 00100000 01100110 01100001 01101001 01101101 00100000 00100001
+                            </div>
+                        </div>
+                    </Modal.Body>
                 </Modal>
-
         }
         else //No trainer infos
         {
@@ -114,11 +115,11 @@ export default class SurveyPage extends React.Component {
     }
 
     //Modal relative functions
-    handleOpen = () => {
+    open_quest_interface = () => {
         this.setState({ open_modal: true });
     };
 
-    handleClose = () => {
+    close_quest_interface = () => {
         this.setState({ open_modal: false });
     };
 
