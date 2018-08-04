@@ -1,0 +1,23 @@
+{
+	"0":{
+		"name":"j'ai faim",
+		"max_step":2,
+		"steps": {
+			"0": {
+				"id":0,
+				"speaker":"robot",
+				"quest_speech":"01001010 00100111 01100001 01101001 00100000 01100110 01100001 01101001 01101101 00100000 00100001"
+			},
+			"1": {
+				"id":1,
+				"speaker":"pastecat",
+				"quest_speech":"Qu'il est mignon ! Je ne sais pas ce qu'il veut, mais on doit peut-être le déchiffrer !"
+			},
+			"2": {
+				"id":2,
+				"speaker":"pastecat",
+				"quest_speech":"Toutes les machines s'expriment en langage *binaire*, elles ne comprennent donc que les *1 et les 0*. Si on apprend les bonnes combinaisons, on devrait comprendre ce qu'il essaie de nous dire !"
+			}
+		}
+	}
+}

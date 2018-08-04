@@ -9,6 +9,7 @@ import pastecat from "../Ressources/pastecat.png"
 import ActionDelete from 'material-ui/svg-icons/action/delete';
 //Importing styles
 import "../Styles/dist/Homepage.css";
+import quest_data from "../Ressources/quest_list";
 
 
 const cookies_manager = new Cookies();
@@ -23,9 +24,9 @@ export default class SurveyPage extends React.Component {
                 is_empty:true,
                 error : 'ok'
             },
-            quest:{
-                quest_speaker:'robot'
-            },
+            quest:{},
+            active_quest_step : 0,
+
             open_modal : false
         }
     }
@@ -74,7 +75,7 @@ export default class SurveyPage extends React.Component {
         {
             trainer_name = trainer_infos.name;
             delete_infos_button = <ActionDelete className = "trash_icon" onClick ={()=>this.delete_infos()}/>;
-            let landing_message = <span className="landing_message_wording">{"Salut " + trainer_name}</span>
+            let landing_message = <span className="landing_message_wording">{"Salut " + trainer_name}</span>;
             landing_component =
                 <div className = "landing_message">
                     {landing_message}
@@ -93,7 +94,7 @@ export default class SurveyPage extends React.Component {
                     <Modal.Body className = "robot">
                         <div className = "robot_message">
                             <div className = "speaking_character_name">
-                                Mister Good Bot :
+                                {this.set_speaker_name()}
                             </div>
                             <div className = "quest_speech">
                                 {this.state.quest.quest_speech}
@@ -151,10 +152,12 @@ export default class SurveyPage extends React.Component {
             error : 'ok'
         };
         let quest = {};
-        quest.quest_speech = "01001010 00100111 01100001 01101001 00100000 01100110 01100001 01101001 01101101 00100000 00100001"
+        quest.quest_speech = quest_data["0"]["steps"][0]["quest_speech"];
+        quest.speaker = quest_data["0"]["steps"][0]["speaker"];
         this.setState({
             trainer_infos,
             trainer_name_field,
+            active_quest_step : 0,
             quest
         })
     }
@@ -206,36 +209,37 @@ export default class SurveyPage extends React.Component {
         return input_name_container;
     }
 
+
+
     //Sets the modal content to the previous step
     previous_text() {
-        let quest = this.state.quest;
-        quest.quest_speech = "Previous one !";
-        quest.quest_speaker = "robot";
-        this.setState({
-            quest
-        })
+
+        //Can't go lower than 0
+        if(this.state.active_quest_step === 0)
+            return;
+
+        let active_quest_step = this.state.active_quest_step - 1;
+        this.setState({active_quest_step}, ()=>this.refresh_quest_interface())
     }
 
     //Sets the modal content to the previous step
     next_text() {
+        //Can't go higher than max quest step
+        if(this.state.active_quest_step === quest_data["0"]["max_step"])
+            return;
 
-        let quest = this.state.quest;
-        quest.quest_speech = "Next one !";
-        quest.quest_speaker = "pastecat";
-        this.setState({
-            quest
-        })
-
+        let active_quest_step = this.state.active_quest_step + 1;
+        this.setState({active_quest_step}, ()=>this.refresh_quest_interface())
     }
 
     //Setting speaker image depending on who's speaking
     set_speaker_image() {
 
-        if(this.state.quest.quest_speaker === 'robot')
+        if(this.state.quest.speaker === 'robot')
         {
             return <img alt = "robot" className="robot_image_quest" src = {robot_image}/>
         }
-        else if (this.state.quest.quest_speaker === 'pastecat')
+        else if (this.state.quest.speaker === 'pastecat')
         {
             return <img alt = "pastecat" className="pastecat_image_quest" src = {pastecat}/>
         }
@@ -243,5 +247,32 @@ export default class SurveyPage extends React.Component {
         {
             return null;
         }
+    }
+
+    set_speaker_name() {
+        if(this.state.quest.speaker === 'robot')
+        {
+            return "Mister Good Bot"
+        }
+        else if (this.state.quest.speaker === 'pastecat')
+        {
+            return "Pastècat"
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    //Set the quest content from the new quest step id
+    refresh_quest_interface() {
+        let active_quest_step = this.state.active_quest_step;
+        let quest = this.state.quest;
+        quest.speaker = quest_data["0"]["steps"][active_quest_step]["speaker"];
+        quest.quest_speech = quest_data["0"]["steps"][active_quest_step]["quest_speech"];
+        this.setState({
+            quest
+        })
+
     }
 }
