@@ -1,13 +1,15 @@
 import React from "react";
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
-import Modal from '@material-ui/core/Modal';
-import robot_image from "../Ressources/robot_image.png"
+import {Modal} from 'react-bootstrap';
 import { Cookies } from 'react-cookie';
+import robot_image from "../Ressources/robot_image.png"
+import pastecat from "../Ressources/pastecat.png"
 
 import ActionDelete from 'material-ui/svg-icons/action/delete';
 //Importing styles
 import "../Styles/dist/Homepage.css";
+import quest_data from "../Ressources/quest_list";
 
 
 const cookies_manager = new Cookies();
@@ -22,6 +24,9 @@ export default class SurveyPage extends React.Component {
                 is_empty:true,
                 error : 'ok'
             },
+            quest:{},
+            active_quest_step : 0,
+
             open_modal : false
         }
     }
@@ -70,7 +75,7 @@ export default class SurveyPage extends React.Component {
         {
             trainer_name = trainer_infos.name;
             delete_infos_button = <ActionDelete className = "trash_icon" onClick ={()=>this.delete_infos()}/>;
-            let landing_message = <span className="landing_message_wording">{"Salut " + trainer_name}</span>
+            let landing_message = <span className="landing_message_wording">{"Salut " + trainer_name}</span>;
             landing_component =
                 <div className = "landing_message">
                     {landing_message}
@@ -78,23 +83,33 @@ export default class SurveyPage extends React.Component {
                 </div>;
             robot_component =
                 <div className="robot_container">
-                    <i className="material-icons md-18">face</i>
+                    <i className="material-icons md-light quest_button" onClick={() => this.open_quest_interface()}>error</i>
                     <img alt = "robot" className="robot_image" src = {robot_image}/>
 
                 </div>;
 
             modal_content =
-                <Modal
-                    aria-labelledby="simple-modal-title"
-                    aria-describedby="simple-modal-description"
-                    open={this.state.open_modal}
-                    onClose={this.handleClose}
-                >
-                    <div className = "robot_message">
-                        01001010 00100111 01100001 01101001 00100000 01100110 01100001 01101001 01101101 00100000 00100001
-                    </div>
+                <Modal style={{ top: "38%" }} show={this.state.open_modal} onHide = {this.close_quest_interface} onClose={this.close_quest_interface}>
+                    {this.set_speaker_image()}
+                    <Modal.Body className = "robot">
+                        <div className = "robot_message">
+                            <div className = "speaking_character_name">
+                                {this.set_speaker_name()}
+                            </div>
+                            <div className = "quest_speech">
+                                {this.state.quest.quest_speech}
+                            </div>
+                            <div className="modal_navigation_buttons">
+                                <i className="material-icons" onClick = {() => this.previous_text()}>
+                                    keyboard_arrow_left
+                                </i>
+                                <i className="material-icons" onClick = {() => this.next_text()}>
+                                    keyboard_arrow_right
+                                </i>
+                            </div>
+                        </div>
+                    </Modal.Body>
                 </Modal>
-
         }
         else //No trainer infos
         {
@@ -114,11 +129,11 @@ export default class SurveyPage extends React.Component {
     }
 
     //Modal relative functions
-    handleOpen = () => {
+    open_quest_interface = () => {
         this.setState({ open_modal: true });
     };
 
-    handleClose = () => {
+    close_quest_interface = () => {
         this.setState({ open_modal: false });
     };
 
@@ -136,9 +151,14 @@ export default class SurveyPage extends React.Component {
             is_empty:true,
             error : 'ok'
         };
+        let quest = {};
+        quest.quest_speech = quest_data["0"]["steps"][0]["quest_speech"];
+        quest.speaker = quest_data["0"]["steps"][0]["speaker"];
         this.setState({
             trainer_infos,
-            trainer_name_field
+            trainer_name_field,
+            active_quest_step : 0,
+            quest
         })
     }
 
@@ -187,5 +207,72 @@ export default class SurveyPage extends React.Component {
             </div>;
 
         return input_name_container;
+    }
+
+
+
+    //Sets the modal content to the previous step
+    previous_text() {
+
+        //Can't go lower than 0
+        if(this.state.active_quest_step === 0)
+            return;
+
+        let active_quest_step = this.state.active_quest_step - 1;
+        this.setState({active_quest_step}, ()=>this.refresh_quest_interface())
+    }
+
+    //Sets the modal content to the previous step
+    next_text() {
+        //Can't go higher than max quest step
+        if(this.state.active_quest_step === quest_data["0"]["max_step"])
+            return;
+
+        let active_quest_step = this.state.active_quest_step + 1;
+        this.setState({active_quest_step}, ()=>this.refresh_quest_interface())
+    }
+
+    //Setting speaker image depending on who's speaking
+    set_speaker_image() {
+
+        if(this.state.quest.speaker === 'robot')
+        {
+            return <img alt = "robot" className="robot_image_quest" src = {robot_image}/>
+        }
+        else if (this.state.quest.speaker === 'pastecat')
+        {
+            return <img alt = "pastecat" className="pastecat_image_quest" src = {pastecat}/>
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    set_speaker_name() {
+        if(this.state.quest.speaker === 'robot')
+        {
+            return "Mister Good Bot"
+        }
+        else if (this.state.quest.speaker === 'pastecat')
+        {
+            return "Pastècat"
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    //Set the quest content from the new quest step id
+    refresh_quest_interface() {
+        let active_quest_step = this.state.active_quest_step;
+        let quest = this.state.quest;
+        quest.speaker = quest_data["0"]["steps"][active_quest_step]["speaker"];
+        quest.quest_speech = quest_data["0"]["steps"][active_quest_step]["quest_speech"];
+        this.setState({
+            quest
+        })
+
     }
 }

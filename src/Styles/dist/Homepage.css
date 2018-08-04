@@ -22,19 +22,37 @@
         margin-left:16px;
         color : rgba(219, 86, 86, 0.87) !important;
 
-        transition : all 0.25s ease-in-out;
+        transition : all 0.15s ease-in-out;
     }
 
 .landing_message .trash_icon:hover{
         height:3.5em !important;
         width:3.5em !important;
-        transition : all 0.25s ease-in-out;
+        transition : all 0.15s ease-in-out;
 
         cursor:pointer;
     }
 
+.quest_button{
+    color: #fafafa;
+    border-radius: 100%;
+    background-color: #eeee1e;
+    font-size: 48px;
+    cursor: pointer;
+    align-self: flex-start;
+    z-index:1;
+    transition: font-size 0.15s ease-in
+}
+
+.quest_button:hover{
+    font-size:56px;
+    transition: font-size 0.15s ease-in;
+}
+
 .robot_container{
     margin-top: 18vh;
+    display: flex;
+    justify-content: center;
 }
 
 .robot_container .robot_image{
@@ -42,6 +60,8 @@
         -webkit-animation: robotDefaultFadeIn 0.3s ease-in-out forwards 0.5s, robotIdle 3s linear infinite;
                 animation: robotDefaultFadeIn 0.3s ease-in-out forwards 0.5s, robotIdle 3s linear infinite;
         height: 32vh;
+        transition:height 0.25s;
+
     }
 
 .robot_container .robot_image:hover{
@@ -51,9 +71,54 @@
 
     }
 
-.robot_container .robot_message{
-        border:solid;
+.modal .robot_image_quest{
+        position: absolute;
+        bottom: -10vh;
+        left: -18vh;
+        height: 24vh;
+        z-index: 2;
+        -webkit-animation:robotIdle 1s infinite ease-in-out;
+                animation:robotIdle 1s infinite ease-in-out;
     }
+
+.modal .pastecat_image_quest{
+        position: absolute;
+        bottom: -10vh;
+        right: -24vh;
+        height: 24vh;
+        z-index: 2;
+        -webkit-animation:robotIdle 1s infinite ease-in-out;
+                animation:robotIdle 1s infinite ease-in-out;
+    }
+
+.modal-body .speaking_character_name{
+        font-weight:bolder;
+        font-size:1.35em;
+        padding:12px;
+    }
+
+.modal-body .quest_speech{
+        padding:12px;
+        font-size:1.15em;
+    }
+
+.modal-body .modal_navigation_buttons{
+        display: flex;
+        justify-content: flex-end;
+        transition: background-color 0.15s ease;
+    }
+
+.modal-body .modal_navigation_buttons i:hover{
+            border-radius:100%;
+            cursor:pointer;
+            background-color:#555555;
+            transition: background-color 0.15s ease;
+        }
+
+.modal-body.robot{
+    background-color: #282828;
+    color: #33FF33;
+}
 
 @-webkit-keyframes robotIdle {
     0%{
@@ -61,8 +126,8 @@
                 transform:rotate(0);
     }
     25%{
-        -webkit-transform:rotate(3deg);
-                transform:rotate(3deg);
+        -webkit-transform:rotate(3deg) translate3d(4px, 2px, 1px);
+                transform:rotate(3deg) translate3d(4px, 2px, 1px);
     }
     50%{
         -webkit-transform:rotate(0);
@@ -84,8 +149,8 @@
                 transform:rotate(0);
     }
     25%{
-        -webkit-transform:rotate(3deg);
-                transform:rotate(3deg);
+        -webkit-transform:rotate(3deg) translate3d(4px, 2px, 1px);
+                transform:rotate(3deg) translate3d(4px, 2px, 1px);
     }
     50%{
         -webkit-transform:rotate(0);
