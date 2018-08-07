@@ -91,14 +91,16 @@
                 animation:robotIdle 1s infinite ease-in-out;
     }
 
-.modal-body .speaking_character_name{
-        font-weight:bolder;
-        font-size:1.35em;
+.modal-body .robot_message > *{
         padding:12px;
     }
 
+.modal-body .speaking_character_name{
+        font-weight:bolder;
+        font-size:1.35em;
+    }
+
 .modal-body .quest_speech{
-        padding:12px;
         font-size:1.15em;
     }
 
@@ -113,6 +115,11 @@
             cursor:pointer;
             background-color:#555555;
             transition: background-color 0.15s ease;
+        }
+
+.modal-body .quest_choices_part .choice:hover{
+            background-color:#333333;
+            cursor:pointer;
         }
 
 .modal-body.robot{

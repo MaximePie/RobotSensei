@@ -88,6 +88,12 @@ export default class SurveyPage extends React.Component {
 
                 </div>;
 
+            let previous_icon = this.set_previous_icon();
+            let next_icon = this.set_next_icon();
+
+            let choices_part = this.set_choices_part();
+
+
             modal_content =
                 <Modal style={{ top: "38%" }} show={this.state.open_modal} onHide = {this.close_quest_interface} onClose={this.close_quest_interface}>
                     {this.set_speaker_image()}
@@ -100,13 +106,10 @@ export default class SurveyPage extends React.Component {
                                 {this.state.quest.quest_speech}
                             </div>
                             <div className="modal_navigation_buttons">
-                                <i className="material-icons" onClick = {() => this.previous_text()}>
-                                    keyboard_arrow_left
-                                </i>
-                                <i className="material-icons" onClick = {() => this.next_text()}>
-                                    keyboard_arrow_right
-                                </i>
+                                {previous_icon}
+                                {next_icon}
                             </div>
+                            {choices_part}
                         </div>
                     </Modal.Body>
                 </Modal>
@@ -154,6 +157,7 @@ export default class SurveyPage extends React.Component {
         let quest = {};
         quest.quest_speech = quest_data["0"]["steps"][0]["quest_speech"];
         quest.speaker = quest_data["0"]["steps"][0]["speaker"];
+        quest.choices = quest_data["0"]["steps"][0]["choices"] ? quest_data["0"]["steps"][0]["choices"] : {};
         this.setState({
             trainer_infos,
             trainer_name_field,
@@ -228,6 +232,14 @@ export default class SurveyPage extends React.Component {
         if(this.state.active_quest_step === quest_data["0"]["max_step"])
             return;
 
+        if(this.state.quest.choices && !this.state.show_quest_choices) //Display choices
+        {
+            this.setState({
+                show_quest_choices : true
+            });
+            return;
+        }
+
         let active_quest_step = this.state.active_quest_step + 1;
         this.setState({active_quest_step}, ()=>this.refresh_quest_interface())
     }
@@ -268,11 +280,75 @@ export default class SurveyPage extends React.Component {
     refresh_quest_interface() {
         let active_quest_step = this.state.active_quest_step;
         let quest = this.state.quest;
-        quest.speaker = quest_data["0"]["steps"][active_quest_step]["speaker"];
-        quest.quest_speech = quest_data["0"]["steps"][active_quest_step]["quest_speech"];
+        let new_step = quest_data["0"]["steps"][active_quest_step];
+        quest.speaker = new_step["speaker"];
+        quest.quest_speech = new_step["quest_speech"];
+        if(new_step["choices"])
+        {
+            quest.choices = new_step["choices"];
+        }
+        else
+        {
+            quest.choices = null;
+            this.setState({
+                show_quest_choices : false
+            })
+        }
         this.setState({
             quest
         })
 
+    }
+
+    set_previous_icon() {
+        if(this.state.active_quest_step === 0)
+        {
+            return null;
+        }
+        else
+        {
+            return <i className="material-icons" onClick = {() => this.previous_text()}>
+                keyboard_arrow_left
+            </i>
+        }
+    }
+
+    set_next_icon() {
+        if(this.state.active_quest_step === quest_data["0"]["max_step"])
+        {
+            return null;
+        }
+        else
+        {
+            return <i className="material-icons" onClick={() => this.next_text()}>
+                keyboard_arrow_right
+            </i>
+        }
+    }
+
+    //Returns a component filled with an array of choice
+    set_choices_part() {
+        if(this.state.show_quest_choices)
+        {
+            let choices = [];
+            Object.values(this.state.quest.choices).forEach(choice =>{
+               choices.push(<div key ={choice.message} className = "choice" onClick = {() => this.select_choice(choice.destination)}>{choice.message}</div>)
+            });
+
+            return <div className= "quest_choices_part">{choices}</div>
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    //Change the current step depending on the player's choice
+    select_choice(destination) {
+        this.setState({
+            active_quest_step : destination
+        }, function(){
+            this.refresh_quest_interface()
+        });
     }
 }

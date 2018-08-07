@@ -92,15 +92,16 @@
 .modal-body{
 
 
+    .robot_message > *{
+        padding:12px;
+    }
 
     .speaking_character_name{
         font-weight:bolder;
         font-size:1.35em;
-        padding:12px;
     }
 
     .quest_speech{
-        padding:12px;
         font-size:1.15em;
     }
 
@@ -115,6 +116,13 @@
             background-color:#555555;
             transition: background-color 0.15s ease;
         }
+    }
+    .quest_choices_part{
+        .choice:hover{
+            background-color:#333333;
+            cursor:pointer;
+        }
+
     }
 }
 
